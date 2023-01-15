@@ -9,15 +9,16 @@ using Bombilla;
 
 namespace Bombilla
 {
-    public class ViewModel
+    public class ViewModel : INotifyPropertyChanged
     {
-        private Bombilla100 _bombilla;
-        public Bombilla100 Bombilla
+        private bool _isOn;
+        public bool IsOn
         {
-            get { return _bombilla; }
+            get { return _isOn; }
             set
             {
-                _bombilla = value;
+                _isOn = value;
+                OnPropertyChanged("IsOn");
             }
         }
 
@@ -26,19 +27,23 @@ namespace Bombilla
 
         public ViewModel()
         {
-            Bombilla = new Bombilla100();
             EncenderCommand = new RelayCommand(Encender);
             ApagarCommand = new RelayCommand(Apagar);
         }
 
         private void Encender()
         {
-            Bombilla.IsOn = true;
+            IsOn = true;
         }
 
         private void Apagar()
         {
-            Bombilla.IsOn = false;
+            IsOn = false;
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
